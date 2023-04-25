@@ -4,7 +4,9 @@ import 'package:quiz_app/data/questions.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class QuestionScreen extends StatefulWidget {
-  const QuestionScreen({super.key});
+  const QuestionScreen({super.key, required this.onSelectAnswer});
+  // this function will be called when we choose an answer
+  final void Function(String answer) onSelectAnswer;
 
   @override
   State<QuestionScreen> createState() => _QuestionScreenState();
@@ -13,7 +15,9 @@ class QuestionScreen extends StatefulWidget {
 class _QuestionScreenState extends State<QuestionScreen> {
   var currentQuestionIndex = 0;
 
-  void answerQuestion() {
+  // this function receives the selected answer and calls the function that we passed from the AnswerButton widget
+  void answerQuestion(String selectedAnswer) {
+    widget.onSelectAnswer(selectedAnswer);
     setState(() {
       currentQuestionIndex++;
     });
@@ -33,9 +37,9 @@ class _QuestionScreenState extends State<QuestionScreen> {
             Text(
               currentQuestion.text,
               style: GoogleFonts.lato(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 20),
@@ -46,7 +50,12 @@ class _QuestionScreenState extends State<QuestionScreen> {
                     const SizedBox(
                       height: 5,
                     ),
-                    AnswerButton(answerText: data, onPressed: answerQuestion),
+                    AnswerButton(
+                        answerText: data,
+                        onPressed: () {
+                          // when we tap this button, we will call the function and value of data will be passed to the answerQuestion function
+                          answerQuestion(data);
+                        }),
                     const SizedBox(height: 5),
                   ],
                 );
